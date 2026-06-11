@@ -136,3 +136,72 @@ contract IsaXX {
     }
 
     struct IxxCycleRing {
+        uint64 openedAt;
+        uint256 shardWeight;
+        uint256 bundleWeight;
+        bytes32 mixHA;
+        bytes32 mixHB;
+    }
+
+    struct IxxRelayDesk {
+        bool enrolled;
+        bytes32 moniker;
+        uint64 enrolledAt;
+        uint32 shardTally;
+    }
+
+    uint256 public constant IXX_TIER_CAP = 8;
+    uint256 public constant IXX_SHARD_FEE = 0.004 ether;
+    uint256 public constant IXX_RELAY_BOND = 0.08 ether;
+    uint256 public constant IXX_MAX_SHARDS = 152;
+    uint256 public constant IXX_OPEN_BUNDLE_CAP = 81;
+    uint256 public constant IXX_SIGNAL_FLOOR = 727;
+    uint256 public constant IXX_SIGNAL_CEIL = 10254;
+    uint256 public constant IXX_CYCLE_BLOCKS = 530;
+    uint256 public constant IXX_WEIGHT_CAP = 16100;
+    uint256 public constant IXX_TRUST_FLOOR = 363;
+    uint256 public constant IXX_TRUST_CEIL = 8804;
+
+    bytes32 private constant _SALT_0 = 0x9b51b470d6eb225ff71353566f1cb4ef8e72246df224da5ba6f2f07c0e0c6ab9;
+    bytes32 private constant _SALT_1 = 0x7bf430f021139e0242bb4dded427a52bd94b8d85a638a4056614e7b38eaf773a;
+    bytes32 private constant _SALT_2 = 0x0df1467c35704813580f76d63c436554d7ce33b4782683c045a8281f5995cedb;
+    bytes32 private constant _SALT_3 = 0x690724ef277ba46331cfa3430b877836dc3bfd85d67eaa5dc342ddfd9a1f8fe0;
+    bytes32 private constant _SALT_4 = 0xd96f4463a6b544c4d17da0141fb0e4d49f11430e32a634f89b90e09b6c89e887;
+    bytes32 private constant _SALT_5 = 0x08afa6746972306897dd9120a6f77c709f128035381eae72d60bb90613c0f9ec;
+    bytes32 private constant _SALT_6 = 0x0f2866a8c85b0add4cd0445148a25df503daeec140bc1ea61a81ffe0b7e1f3ef;
+    bytes32 private constant _SALT_7 = 0xdc6f2691d3b518dfbdfe9df6f87cac57f2862add8d1b9f12cf4897daf931378e;
+    bytes32 private constant _SALT_8 = 0xdfb0d9ac75d94e0a3bef78477c9bf5315c23034345def4fe112fe119a026c344;
+    bytes32 private constant IXX_DOMAIN = keccak256("IsaXX.prismFoldRelay");
+
+    address public immutable ADDRESS_A;
+    address public immutable ADDRESS_B;
+    address public immutable ADDRESS_C;
+
+    address public director;
+    address public curator;
+    bool public lanePaused;
+    uint256 public activeCycle;
+    uint256 public traceSerial;
+    uint256 public openBundles;
+    uint256 public totalBondWei;
+    uint256 public deployBlock;
+
+    mapping(uint256 => IxxCorridor) public corridors;
+    mapping(bytes32 => IxxShard) public shards;
+    mapping(bytes32 => IxxBundle) public bundles;
+    mapping(bytes32 => IxxSignal) public signals;
+    mapping(uint256 => IxxCycleRing) public cycleRings;
+    mapping(uint256 => mapping(address => uint256)) public relayWeight;
+    mapping(bytes32 => mapping(address => bool)) public voteCast;
+    mapping(bytes32 => bool) public shardIdUsed;
+    mapping(bytes32 => bool) public bundleIdUsed;
+    mapping(bytes32 => bool) public signalIdUsed;
+    mapping(address => IxxRelayDesk) public relayDesks;
+    mapping(address => bytes32[]) private _shardsByRelay;
+    bytes32[] private _shardIndex;
+    uint256 private _gate;
+
+    modifier nonReentrant() {
+        if (_gate == 2) revert IXx_Reentered();
+        _gate = 2;
+        _;
