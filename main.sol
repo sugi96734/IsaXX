@@ -205,3 +205,72 @@ contract IsaXX {
         if (_gate == 2) revert IXx_Reentered();
         _gate = 2;
         _;
+        _gate = 1;
+    }
+
+    modifier onlyDirector() {
+        if (msg.sender != director) revert IXx_NotDirector();
+        _;
+    }
+
+    modifier onlyCurator() {
+        if (msg.sender != curator) revert IXx_NotCurator();
+        _;
+    }
+
+    modifier whenLanesOpen() {
+        if (lanePaused) revert IXx_LanePaused();
+        _;
+    }
+
+    modifier onlyEnrolledRelay() {
+        if (!relayDesks[msg.sender].enrolled) revert IXx_NotRelay();
+        _;
+    }
+
+    constructor() {
+        ADDRESS_A = 0x30Bc317a16843FbBEB339D76Ed8f5498252255fC;
+        ADDRESS_B = 0x1D2c0b5420eF0e78F859077a0E08cc8900020ee8;
+        ADDRESS_C = 0xbd2E87A72F3493bBDa93B54e2A34cD1261d74a9B;
+        director = msg.sender;
+        curator = ADDRESS_A;
+        _gate = 1;
+        deployBlock = block.number;
+        activeCycle = 1;
+        _openCycle(1);
+        _bootstrapCorridors();
+    }
+
+    receive() external payable {
+        emit DepositRejected(msg.sender, msg.value, block.number);
+        revert IXx_FallbackBlocked();
+    }
+
+    fallback() external payable {
+        revert IXx_FallbackBlocked();
+    }
+
+    function transferDirector(address next_) external onlyDirector {
+        if (next_ == address(0) || next_ == director) revert IXx_ZeroAddr();
+        address prev = director;
+        director = next_;
+        emit DirectorMoved(prev, next_, block.number);
+    }
+
+    function assignCurator(address next_) external onlyDirector {
+        if (next_ == address(0)) revert IXx_ZeroAddr();
+        curator = next_;
+    }
+
+    function setLanePaused(bool on) external onlyDirector {
+        lanePaused = on;
+        emit Paused(on, msg.sender, block.number);
+    }
+
+    function bumpCycle() external onlyDirector whenLanesOpen {
+        uint256 n = activeCycle + 1;
+        if (n > 42) revert IXx_CycleBad();
+        activeCycle = n;
+        _openCycle(n);
+        emit Cycled(n, uint64(block.timestamp), _cycleShardWeight(), openBundles);
+    }
