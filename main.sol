@@ -757,3 +757,72 @@ contract IsaXX {
     }
 
     // readers
+    function readShard_0(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_0));
+    }
+
+    function readShard_1(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_1));
+    }
+
+    function readShard_2(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_2));
+    }
+
+    function readShard_3(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_3));
+    }
+
+    function readShard_4(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
