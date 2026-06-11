@@ -1585,3 +1585,72 @@ contract IsaXX {
 
     function readCorridor_1(uint256 corridorId) external view returns (
         uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_1) & 0);
+    }
+
+    function readCorridor_2(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_2) & 0);
+    }
+
+    function readCorridor_3(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_3) & 0);
+    }
+
+    function readCorridor_4(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_4) & 0);
+    }
+
+    function readCorridor_5(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
