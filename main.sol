@@ -412,3 +412,72 @@ contract IsaXX {
         IxxBundle storage b = bundles[bundleId];
         if (b.phase != IxxBundlePhase.Waiting && b.phase != IxxBundlePhase.Running) revert IXx_BundleSealed();
         if (trustScore < IXX_TRUST_FLOOR) revert IXx_TrustLow();
+        if (trustScore > IXX_TRUST_CEIL) revert IXx_TrustHigh();
+        b.phase = IxxBundlePhase.Final;
+        b.resultHash = payloadHash;
+        b.trustScore = trustScore;
+        if (openBundles > 0) unchecked { openBundles -= 1; }
+        emit Settled(bundleId, payloadHash, trustScore, activeCycle);
+    }
+
+    function emitSignal(
+        bytes32 signalId,
+        uint256 corridorId,
+        bytes32 signalTag,
+        bytes32 rollupHash,
+        uint16 signalBand
+    ) external onlyCurator whenLanesOpen {
+        if (signalIdUsed[signalId]) revert IXx_RelayStale();
+        if (signalBand < IXX_SIGNAL_FLOOR) revert IXx_TrustLow();
+        if (signalBand > IXX_SIGNAL_CEIL) revert IXx_TrustHigh();
+        IxxCorridor storage c = corridors[corridorId];
+        if (c.state != IxxCorridorState.Active) revert IXx_CorridorHalted();
+        signalIdUsed[signalId] = true;
+        signals[signalId] = IxxSignal({
+            corridorId: corridorId,
+            signalTag: signalTag,
+            rollupHash: rollupHash,
+            signalBand: signalBand,
+            stampedAt: uint64(block.timestamp)
+        });
+        emit Signaled(signalId, corridorId, signalBand, block.timestamp);
+    }
+
+    function fundCorridor() external payable whenLanesOpen {
+        if (msg.value == 0) revert IXx_ZeroWei();
+        emit Trace_0(traceSerial, msg.sender, msg.value, activeCycle);
+        unchecked { traceSerial += 1; }
+    }
+
+    function _pushNative(address to, uint256 amt) internal {
+        (bool ok, ) = payable(to).call{value: amt}("");
+        if (!ok) revert IXx_NativeFail();
+    }
+
+    function _openCycle(uint256 cycleId) internal {
+        IxxCycleRing storage ring = cycleRings[cycleId];
+        ring.openedAt = uint64(block.timestamp);
+        ring.shardWeight = _cycleShardWeight();
+        ring.bundleWeight = openBundles;
+        (ring.mixHA, ring.mixHB) = _splitDigest(cycleId, ring.shardWeight, ring.bundleWeight);
+    }
+
+    function _splitDigest(uint256 cycleId, uint256 sw, uint256 bw)
+        internal
+        view
+        returns (bytes32 hA, bytes32 hB)
+    {
+        hA = keccak256(abi.encode(IXX_DOMAIN, cycleId, sw, ADDRESS_A, _SALT_0));
+        hB = keccak256(abi.encode(bw, cycleId, ADDRESS_B, _SALT_1, IXX_CYCLE_BLOCKS));
+    }
+
+    function shardDigest(bytes32 shardId) public view returns (bytes32) {
+        IxxShard storage s = shards[shardId];
+        (bytes32 hA, bytes32 hB) = _splitDigest(s.corridorId, uint256(uint160(s.relay)), s.bondWei);
+        return keccak256(abi.encodePacked(hA, hB, s.intentFingerprint, ADDRESS_C, _SALT_2));
+    }
+
+    function _cycleShardWeight() internal view returns (uint256 w) {
+        for (uint256 i = 1; i <= 27; ++i) {
+            w += corridors[i].weightSum;
+        }
