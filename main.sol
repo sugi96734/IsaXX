@@ -343,3 +343,72 @@ contract IsaXX {
         _shardIndex.push(shardId);
         emit Filed(shardId, corridorId, msg.sender, intentTier, msg.value);
     }
+
+    function voteShard(bytes32 shardId, bool affirm) external whenLanesOpen {
+        IxxShard storage s = shards[shardId];
+        if (!s.live) revert IXx_ShardMissing();
+        if (s.relay == msg.sender) revert IXx_VoteSelf();
+        if (voteCast[shardId][msg.sender]) revert IXx_VoteCast();
+        voteCast[shardId][msg.sender] = true;
+        if (affirm) unchecked { s.yesVotes += 1; }
+        else unchecked { s.noVotes += 1; }
+        emit Voted(shardId, msg.sender, affirm, activeCycle);
+    }
+
+    function bondShard(bytes32 shardId) external payable nonReentrant whenLanesOpen {
+        if (msg.value == 0) revert IXx_ZeroWei();
+        IxxShard storage s = shards[shardId];
+        if (!s.live) revert IXx_ShardMissing();
+        s.bondWei += msg.value;
+        totalBondWei += msg.value;
+        _pushNative(s.relay, msg.value);
+        emit Bonded(shardId, msg.sender, msg.value, activeCycle);
+    }
+
+    function joinRelay(bytes32 moniker) external payable nonReentrant whenLanesOpen {
+        if (msg.value < IXX_RELAY_BOND) revert IXx_BondLow();
+        if (relayDesks[msg.sender].enrolled) revert IXx_RelayKnown();
+        relayDesks[msg.sender] = IxxRelayDesk({
+            enrolled: true,
+            moniker: moniker,
+            enrolledAt: uint64(block.timestamp),
+            shardTally: 0
+        });
+        totalBondWei += msg.value;
+        emit RelayJoined(msg.sender, moniker, msg.value);
+    }
+
+    function routeBundle(bytes32 bundleId, uint256 corridorId, bytes32 intentTag)
+        external
+        payable
+        nonReentrant
+        whenLanesOpen
+        onlyEnrolledRelay
+    {
+        if (bundleId == bytes32(0)) revert IXx_HashVoid();
+        if (bundleIdUsed[bundleId]) revert IXx_BundleOpen();
+        if (msg.value < IXX_SHARD_FEE) revert IXx_BondLow();
+        if (openBundles >= IXX_OPEN_BUNDLE_CAP) revert IXx_QuotaFull();
+        IxxCorridor storage c = corridors[corridorId];
+        if (c.state != IxxCorridorState.Active) revert IXx_CorridorHalted();
+        bundleIdUsed[bundleId] = true;
+        bundles[bundleId] = IxxBundle({
+            corridorId: corridorId,
+            requester: msg.sender,
+            intentTag: intentTag,
+            phase: IxxBundlePhase.Waiting,
+            resultHash: bytes32(0),
+            trustScore: 0,
+            queuedAt: uint64(block.timestamp)
+        });
+        unchecked {
+            openBundles += 1;
+            c.bundleTally += 1;
+        }
+        emit Routed(bundleId, corridorId, intentTag, block.timestamp);
+    }
+
+    function settleBundle(bytes32 bundleId, bytes32 payloadHash, uint16 trustScore) external onlyCurator {
+        IxxBundle storage b = bundles[bundleId];
+        if (b.phase != IxxBundlePhase.Waiting && b.phase != IxxBundlePhase.Running) revert IXx_BundleSealed();
+        if (trustScore < IXX_TRUST_FLOOR) revert IXx_TrustLow();
