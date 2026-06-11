@@ -1447,3 +1447,72 @@ contract IsaXX {
         digest = keccak256(abi.encode(shardId, bond, _SALT_0));
     }
 
+    function readShard_46(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_1));
+    }
+
+    function readShard_47(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_2));
+    }
+
+    function readShard_48(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_3));
+    }
+
+    function readShard_49(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_4));
+    }
+
+    function readShard_50(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
