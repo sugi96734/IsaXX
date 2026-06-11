@@ -550,3 +550,72 @@ contract IsaXX {
             bornAt: uint64(block.timestamp),
             shardTally: 0,
             bundleTally: 0,
+            weightSum: 214,
+            corridorKey: 0xdc6f2691d3b518dfbdfe9df6f87cac57f2862add8d1b9f12cf4897daf931378e
+        });
+        emit Opened(7, 0xdc6f2691d3b518dfbdfe9df6f87cac57f2862add8d1b9f12cf4897daf931378e, uint8(3), 214);
+        corridors[8] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(7),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 243,
+            corridorKey: 0xdfb0d9ac75d94e0a3bef78477c9bf5315c23034345def4fe112fe119a026c344
+        });
+        emit Opened(8, 0xdfb0d9ac75d94e0a3bef78477c9bf5315c23034345def4fe112fe119a026c344, uint8(7), 243);
+        corridors[9] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(2),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 272,
+            corridorKey: 0x9b51b470d6eb225ff71353566f1cb4ef8e72246df224da5ba6f2f07c0e0c6ab9
+        });
+        emit Opened(9, 0x9b51b470d6eb225ff71353566f1cb4ef8e72246df224da5ba6f2f07c0e0c6ab9, uint8(2), 272);
+        corridors[10] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(4),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 301,
+            corridorKey: 0x7bf430f021139e0242bb4dded427a52bd94b8d85a638a4056614e7b38eaf773a
+        });
+        emit Opened(10, 0x7bf430f021139e0242bb4dded427a52bd94b8d85a638a4056614e7b38eaf773a, uint8(4), 301);
+        corridors[11] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(3),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 330,
+            corridorKey: 0x0df1467c35704813580f76d63c436554d7ce33b4782683c045a8281f5995cedb
+        });
+        emit Opened(11, 0x0df1467c35704813580f76d63c436554d7ce33b4782683c045a8281f5995cedb, uint8(3), 330);
+        corridors[12] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(5),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 359,
+            corridorKey: 0x690724ef277ba46331cfa3430b877836dc3bfd85d67eaa5dc342ddfd9a1f8fe0
+        });
+        emit Opened(12, 0x690724ef277ba46331cfa3430b877836dc3bfd85d67eaa5dc342ddfd9a1f8fe0, uint8(5), 359);
+        corridors[13] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(6),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
+            bundleTally: 0,
+            weightSum: 388,
+            corridorKey: 0xd96f4463a6b544c4d17da0141fb0e4d49f11430e32a634f89b90e09b6c89e887
+        });
+        emit Opened(13, 0xd96f4463a6b544c4d17da0141fb0e4d49f11430e32a634f89b90e09b6c89e887, uint8(6), 388);
+        corridors[14] = IxxCorridor({
+            state: IxxCorridorState.Active,
+            intentTier: uint8(4),
+            bornAt: uint64(block.timestamp),
+            shardTally: 0,
