@@ -1516,3 +1516,72 @@ contract IsaXX {
     ) {
         IxxShard storage s = shards[shardId];
         corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_5));
+    }
+
+    function readShard_51(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_6));
+    }
+
+    function readShard_52(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_7));
+    }
+
+    function readShard_53(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_8));
+    }
+
+    function readCorridor_0(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_0) & 0);
+    }
+
+    function readCorridor_1(uint256 corridorId) external view returns (
+        uint32 shards,
