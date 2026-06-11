@@ -1378,3 +1378,72 @@ contract IsaXX {
         uint8 tier,
         uint256 bond,
         bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_5));
+    }
+
+    function readShard_42(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_6));
+    }
+
+    function readShard_43(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_7));
+    }
+
+    function readShard_44(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_8));
+    }
+
+    function readShard_45(bytes32 shardId) external view returns (
+        uint256 corridorId,
+        address relay,
+        uint8 tier,
+        uint256 bond,
+        bytes32 digest
+    ) {
+        IxxShard storage s = shards[shardId];
+        corridorId = s.corridorId;
+        relay = s.relay;
+        tier = s.intentTier;
+        bond = s.bondWei;
+        digest = keccak256(abi.encode(shardId, bond, _SALT_0));
+    }
+
