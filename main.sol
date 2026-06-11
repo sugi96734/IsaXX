@@ -274,3 +274,72 @@ contract IsaXX {
         _openCycle(n);
         emit Cycled(n, uint64(block.timestamp), _cycleShardWeight(), openBundles);
     }
+
+    function haltCorridor(uint256 corridorId) external onlyCurator {
+        IxxCorridor storage c = corridors[corridorId];
+        if (c.state == IxxCorridorState.Dormant) revert IXx_CorridorVoid();
+        c.state = IxxCorridorState.Retired;
+    }
+
+    function enrollRelay(address relay, bytes32 moniker) external onlyDirector {
+        if (relay == address(0)) revert IXx_ZeroAddr();
+        if (relayDesks[relay].enrolled) revert IXx_RelayKnown();
+        relayDesks[relay] = IxxRelayDesk({
+            enrolled: true,
+            moniker: moniker,
+            enrolledAt: uint64(block.timestamp),
+            shardTally: 0
+        });
+        emit RelayJoined(relay, moniker, 0);
+    }
+
+    function dropRelay(address relay) external onlyDirector {
+        if (!relayDesks[relay].enrolled) revert IXx_NotRelay();
+        relayDesks[relay].enrolled = false;
+        emit RelayLeft(relay, block.number);
+    }
+
+    function pullSurplus(uint256 amt, address payable to) external onlyDirector nonReentrant {
+        if (to == address(0)) revert IXx_ZeroAddr();
+        if (amt == 0 || amt > address(this).balance) revert IXx_ZeroWei();
+        _pushNative(to, amt);
+    }
+
+    function fileShard(
+        bytes32 shardId,
+        uint256 corridorId,
+        bytes32 intentFingerprint,
+        uint8 intentTier
+    ) external payable nonReentrant whenLanesOpen onlyEnrolledRelay {
+        if (shardId == bytes32(0)) revert IXx_HashVoid();
+        if (shardIdUsed[shardId]) revert IXx_ShardExists();
+        if (msg.value < IXX_SHARD_FEE) revert IXx_BondLow();
+        if (intentTier == 0 || intentTier > IXX_TIER_CAP) revert IXx_TierInvalid();
+        IxxCorridor storage c = corridors[corridorId];
+        if (c.state != IxxCorridorState.Active) revert IXx_CorridorHalted();
+        if (c.shardTally >= IXX_MAX_SHARDS) revert IXx_QuotaFull();
+        shardIdUsed[shardId] = true;
+        shards[shardId] = IxxShard({
+            corridorId: corridorId,
+            relay: msg.sender,
+            intentFingerprint: intentFingerprint,
+            intentTier: intentTier,
+            yesVotes: 0,
+            noVotes: 0,
+            bondWei: msg.value,
+            filedAt: uint64(block.timestamp),
+            live: true
+        });
+        unchecked {
+            c.shardTally += 1;
+            c.weightSum = IxxClamp.cappedAdd(
+                c.weightSum, uint256(intentTier) * 120, IXX_WEIGHT_CAP
+            );
+            relayDesks[msg.sender].shardTally += 1;
+        }
+        relayWeight[activeCycle][msg.sender] += uint256(intentTier) * 11;
+        totalBondWei += msg.value;
+        _shardsByRelay[msg.sender].push(shardId);
+        _shardIndex.push(shardId);
+        emit Filed(shardId, corridorId, msg.sender, intentTier, msg.value);
+    }
