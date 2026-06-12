@@ -1861,3 +1861,72 @@ contract IsaXX {
         uint256 weight,
         uint8 tier,
         bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_0) & 0);
+    }
+
+    function readCorridor_19(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_1) & 0);
+    }
+
+    function readCorridor_20(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_2) & 0);
+    }
+
+    function readCorridor_21(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_3) & 0);
+    }
+
+    function readCorridor_22(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
