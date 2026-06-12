@@ -1654,3 +1654,72 @@ contract IsaXX {
         uint8 tier,
         bytes32 key
     ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_5) & 0);
+    }
+
+    function readCorridor_6(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_6) & 0);
+    }
+
+    function readCorridor_7(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_7) & 0);
+    }
+
+    function readCorridor_8(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_8) & 0);
+    }
+
+    function readCorridor_9(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
