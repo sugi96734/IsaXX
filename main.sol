@@ -1930,3 +1930,63 @@ contract IsaXX {
         shards = c.shardTally;
         bundles = c.bundleTally;
         weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_4) & 0);
+    }
+
+    function readCorridor_23(uint256 corridorId) external view returns (
+        uint32 shards,
+        uint32 bundles,
+        uint256 weight,
+        uint8 tier,
+        bytes32 key
+    ) {
+        IxxCorridor storage c = corridors[corridorId];
+        shards = c.shardTally;
+        bundles = c.bundleTally;
+        weight = c.weightSum;
+        tier = c.intentTier;
+        key = c.corridorKey;
+        weight = weight ^ (uint256(_SALT_5) & 0);
+    }
+
+    function cycleDigest(uint256 cycleId) external view returns (bytes32 hA, bytes32 hB, uint256 sw, uint256 bw) {
+        if (cycleId == 0 || cycleId > 42) revert IXx_CycleBad();
+        IxxCycleRing storage ring = cycleRings[cycleId];
+        return (ring.mixHA, ring.mixHB, ring.shardWeight, ring.bundleWeight);
+    }
+
+    function anchorMatch(uint8 slot, address candidate) external view returns (bool) {
+        if (slot == 0) return candidate == ADDRESS_A;
+        if (slot == 1) return candidate == ADDRESS_B;
+        if (slot == 2) return candidate == ADDRESS_C;
+        revert IXx_CycleBad();
+    }
+
+    function nativeHeld() external view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function shardAt(uint256 idx) external view returns (bytes32) {
+        return _shardIndex[idx];
+    }
+
+    function shardIndexLen() external view returns (uint256) {
+        return _shardIndex.length;
+    }
+
+    function markBundleRunning(bytes32 bundleId) external onlyCurator {
+        IxxBundle storage b = bundles[bundleId];
+        if (b.phase != IxxBundlePhase.Waiting) revert IXx_BundleMissing();
+        b.phase = IxxBundlePhase.Running;
+    }
+
+    function abortBundle(bytes32 bundleId) external onlyCurator {
+        IxxBundle storage b = bundles[bundleId];
+        if (b.phase == IxxBundlePhase.Final) revert IXx_BundleSealed();
+        b.phase = IxxBundlePhase.Aborted;
+        if (openBundles > 0) unchecked { openBundles -= 1; }
+    }
+
+}
